@@ -1,0 +1,17 @@
+__pycache__/
+.pytest_cache/
+.venv/
+runtime/
+artifacts/
+*.pyc
+build/
+dist/
+tmp/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+.codex/
+.agents/

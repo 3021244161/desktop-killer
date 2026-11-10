@@ -1,0 +1,129 @@
+{
+  "pygame": "2.6.1",
+  "official_windows_dependency_manifest": "https://github.com/pygame/pygame/blob/2.6.1/buildconfig/download_win_prebuilt.py",
+  "binaries": [
+    {
+      "binary": "SDL2.dll",
+      "sha256": "520d0459b91efa32fbccf9027a9ca1fc5aae657e679ce8e90f179f9cf5afd279",
+      "version": "2.28.4",
+      "evidence": "DLL resource and SDL version API",
+      "primary_notice": "SDL2-LICENSE.txt"
+    },
+    {
+      "binary": "SDL2_image.dll",
+      "sha256": "1e364af75fee0c83506fbdfd4d5b0e386c4e9c6a33ddbddac61ddb131e360194",
+      "version": "2.0.5",
+      "evidence": "DLL resource and SDL_image version API",
+      "primary_notice": "SDL2_image-LICENSE.txt"
+    },
+    {
+      "binary": "SDL2_mixer.dll",
+      "sha256": "2a0fc5e9f72c2eaec3240cb82b7594a58ccda609485981f256b94d0a4dd8d6f8",
+      "version": "2.6.2",
+      "evidence": "DLL resource and SDL_mixer version API",
+      "primary_notice": "SDL2_mixer-LICENSE.txt"
+    },
+    {
+      "binary": "SDL2_ttf.dll",
+      "sha256": "fcdfabdfce868eb33f7514025ff59c1bb6c418f1bcd6ace2300a9cd4053e1d63",
+      "version": "2.20.1",
+      "evidence": "DLL resource and SDL_ttf version API",
+      "primary_notice": "SDL2_ttf-LICENSE.txt"
+    },
+    {
+      "binary": "freetype.dll",
+      "sha256": "1c487392d6d06970ba3c7b52705881f1fb069f607243499276c2f0c033c7df6f",
+      "version": "2.11.1",
+      "evidence": "DLL resource and FreeType version API",
+      "primary_notice": "FreeType-FTL.txt"
+    },
+    {
+      "binary": "libjpeg-9.dll",
+      "sha256": "3a224af540c96574800f5e9acf64b2cdfb9060e727919ec14fbd187a9b5bfe69",
+      "version": "9b",
+      "evidence": "Embedded 9b 17-Jan-2016 string",
+      "primary_notice": "libjpeg-README.txt"
+    },
+    {
+      "binary": "libpng16-16.dll",
+      "sha256": "e688b4a4d18f4b6ccc99c6ca4980f51218cb825610775192d9b60b2f05eff2d5",
+      "version": "1.6.37",
+      "evidence": "Embedded libpng version string",
+      "primary_notice": "libpng-LICENSE.txt"
+    },
+    {
+      "binary": "libtiff-5.dll",
+      "sha256": "ebfe97ac5ef26b94945af3db5ffd110a4b8e92dc02559bf81ccb33f0d5ebce95",
+      "version": "4.0.9",
+      "evidence": "Embedded LIBTIFF Version 4.0.9 string",
+      "primary_notice": "libtiff-COPYRIGHT.txt"
+    },
+    {
+      "binary": "libwebp-7.dll",
+      "sha256": "9a53563b6058f70f2725029b7dd2fe96f869c20e8090031cd303e994dfe07b50",
+      "version": "1.0.2",
+      "evidence": "WebPGetDecoderVersion API",
+      "primary_notice": "libwebp-COPYING.txt"
+    },
+    {
+      "binary": "libopus-0.dll",
+      "sha256": "771cae79410f7fcc4f993a105a18c4ed9e8cbddd6f807a42228d95f575808806",
+      "version": "1.3.1",
+      "evidence": "Embedded libopus 1.3.1 string",
+      "primary_notice": "libopus-COPYING.txt"
+    },
+    {
+      "binary": "zlib1.dll",
+      "sha256": "b1f58a17f3bfd55523e7bef685acf5b32d1c2a6f25abdcd442681266fd26ab08",
+      "version": "1.2.11",
+      "evidence": "DLL version resource",
+      "primary_notice": "zlib1-LICENSE.txt"
+    },
+    {
+      "binary": "libogg-0.dll",
+      "sha256": "57abc4f6a9accdd08bf9a2b022a66640cc626a5bd4dac6c7c4f06a5df61ee1fe",
+      "version": null,
+      "evidence": "Notice from the SDL_mixer 2.6.2 pinned official submodule; exact DLL revision not independently established",
+      "primary_notice": "libogg-COPYING.txt"
+    },
+    {
+      "binary": "libopusfile-0.dll",
+      "sha256": "ccaaca81810bd2d1cab4692b4253a639f8d5516996db0e24d881efd3efdcc6a4",
+      "version": null,
+      "evidence": "Notice from the SDL_mixer 2.6.2 pinned official submodule; exact DLL revision not independently established",
+      "primary_notice": "libopusfile-COPYING.txt"
+    },
+    {
+      "binary": "libmodplug-1.dll",
+      "sha256": "0c1a9032812ec4c20003a997423e67b71ecb5e59d62cdc18a5bf591176a9010e",
+      "version": null,
+      "evidence": "Notice and README from the SDL_mixer 2.6.2 pinned official submodule; exact DLL revision not independently established",
+      "primary_notice": "libmodplug-COPYING.txt"
+    },
+    {
+      "binary": "portmidi.dll",
+      "sha256": "c9f8d9043ac1570b10f104f2d00aec791f56261c84ee40773be73d0a3822e013",
+      "version": null,
+      "evidence": "Original official PortMidi license; installed DLL has no exposed version and exact revision is not established",
+      "primary_notice": "PortMidi-license.txt"
+    }
+  ],
+  "font_metadata": {
+    "0": [
+      "Copyright 2002 Free Software Foundation."
+    ],
+    "1": [
+      "FreeSans"
+    ],
+    "5": [
+      "$Revision: 0.4 $"
+    ],
+    "13": [
+      "Dovoljena je uporaba v skladu z licenco GNU General Public License.",
+      "The use of this font is granted subject to GNU General Public License."
+    ],
+    "14": [
+      "http://www.gnu.org/copyleft/gpl.html"
+    ]
+  }
+}

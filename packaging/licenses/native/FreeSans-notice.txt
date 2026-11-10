@@ -1,0 +1,24 @@
+Original metadata from pygame 2.6.1 / freesansbold.ttf
+
+Font SHA256: bf9251269f11e4b35582a99376096deee3d0c4973a459cbd97b0bebc01f440ad
+Official pygame source: https://github.com/pygame/pygame/tree/2.6.1
+
+Copyright:
+Copyright 2002 Free Software Foundation.
+
+Family:
+FreeSans
+
+Revision:
+$Revision: 0.4 $
+
+Original license description:
+Dovoljena je uporaba v skladu z licenco GNU General Public License.
+The use of this font is granted subject to GNU General Public License.
+
+Original license URL:
+http://www.gnu.org/copyleft/gpl.html
+
+The embedded metadata refers to the GNU GPL without naming a version.
+A complete original GPL version 2 text is included as FreeSans-GPL-2.0.txt.
+No new font license or embedding exception is claimed by this inventory.

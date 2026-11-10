@@ -1,0 +1,47 @@
+THIRD-PARTY NOTICES
+
+Original installed license and notice files are preserved in this directory.
+This inventory is not a new license and does not replace any original terms.
+
+Collected components:
+- Python 3.10.14: Python/
+- pygame 2.6.1: pygame/
+- Pillow 12.0.0: Pillow/
+- numpy 1.26.4: numpy/
+- pywin32 312: pywin32/
+- PyInstaller 6.21.0: PyInstaller/
+- typing_extensions 4.16.0: typing_extensions/
+- psutil 5.9.0: psutil/
+- defusedxml 0.7.1: defusedxml/
+- openssl 3.6.3: openssl/
+- libffi 3.4.4: libffi/
+- bzip2 1.0.8: bzip2/
+- xz 5.4.6: xz/
+- zlib 1.2.13: zlib/
+- vc14_runtime 14.51.36231: vc14_runtime/
+- ucrt 10.0.26100.0: ucrt/
+
+Native libraries:
+Additional original upstream notices are preserved in native/.
+native/sources.json records exact source URLs and notice SHA256 checksums.
+native/binary-inventory.json records the installed DLL hashes and version evidence.
+SDL, SDL_image, SDL_mixer, SDL_ttf, FreeType, JPEG, PNG, TIFF, WebP, Opus and zlib
+versions were verified from the installed binaries or their version APIs.
+Ogg, Opusfile and ModPlug notices were taken from SDL_mixer 2.6.2's pinned official
+submodules; their exact installed DLL revision was not independently established.
+PortMidi's original official license is included; its exact DLL revision remains unverified.
+FreeSans-notice.txt preserves the actual shipped font's copyright and license metadata.
+This inventory does not claim that the pygame LGPL covers all native libraries.
+
+Required acknowledgements:
+Portions of this software are copyright (C) 2021 The FreeType Project
+(https://www.freetype.org). All rights reserved.
+This software is based in part on the work of the Independent JPEG Group.
+
+Library source locations:
+pygame 2.6.1: https://github.com/pygame/pygame/tree/2.6.1
+pygame Windows dependency manifest: https://github.com/pygame/pygame/blob/2.6.1/buildconfig/download_win_prebuilt.py
+Other corresponding upstream versions and files: native/sources.json.
+Bundled libraries have not been modified by this project.
+
+See manifest.json for exact copied-file SHA256 checksums.

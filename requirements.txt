@@ -1,0 +1,4 @@
+pygame>=2.6,<3
+Pillow>=10
+pywin32>=307
+numpy>=1.24,<3

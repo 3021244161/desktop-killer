@@ -1,0 +1,122 @@
+[
+  {
+    "file": "SDL2-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/SDL/release-2.28.4/LICENSE.txt",
+    "bytes": 884,
+    "sha256": "9928507f684c1965d07f2b6ef4b4723d5efc2f6b4ab731f743a413c51c319927"
+  },
+  {
+    "file": "SDL2_image-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/SDL_image/release-2.0.5/COPYING.txt",
+    "bytes": 996,
+    "sha256": "45079362e2230154205413a6940544ca94e3479ccf76205c71c4f542a6815d25"
+  },
+  {
+    "file": "SDL2_mixer-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/SDL_mixer/release-2.6.2/LICENSE.txt",
+    "bytes": 878,
+    "sha256": "28aabfed22b3cb0b7e23ef40385e4f66297c960082f029c96d073cc1d4e008d5"
+  },
+  {
+    "file": "SDL2_ttf-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/SDL_ttf/release-2.20.1/LICENSE.txt",
+    "bytes": 878,
+    "sha256": "28aabfed22b3cb0b7e23ef40385e4f66297c960082f029c96d073cc1d4e008d5"
+  },
+  {
+    "file": "FreeType-FTL.txt",
+    "source": "https://raw.githubusercontent.com/freetype/freetype/VER-2-11-1/docs/FTL.TXT",
+    "bytes": 6743,
+    "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1"
+  },
+  {
+    "file": "FreeType-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/freetype/freetype/VER-2-11-1/LICENSE.TXT",
+    "bytes": 1870,
+    "sha256": "c85e842b7ff04d95dab7d68e812773de0f8b67940e5449d35b42c66eb0f619fe"
+  },
+  {
+    "file": "libjpeg-README.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/SDL_image/release-2.0.5/external/jpeg-9b/README",
+    "bytes": 18848,
+    "sha256": "6783159a601b23fb42abbcc9e7f57b89a23ddf39cfa862c364844580520a7b43"
+  },
+  {
+    "file": "libpng-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/pnggroup/libpng/v1.6.37/LICENSE",
+    "bytes": 5345,
+    "sha256": "bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b"
+  },
+  {
+    "file": "libtiff-COPYRIGHT.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/libtiff/v4.0.9/COPYRIGHT",
+    "bytes": 1146,
+    "sha256": "fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7"
+  },
+  {
+    "file": "libwebp-COPYING.txt",
+    "source": "https://raw.githubusercontent.com/webmproject/libwebp/v1.0.2/COPYING",
+    "bytes": 1496,
+    "sha256": "5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf"
+  },
+  {
+    "file": "libwebp-PATENTS.txt",
+    "source": "https://raw.githubusercontent.com/webmproject/libwebp/v1.0.2/PATENTS",
+    "bytes": 1436,
+    "sha256": "cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c"
+  },
+  {
+    "file": "libwebp-AUTHORS.txt",
+    "source": "https://raw.githubusercontent.com/webmproject/libwebp/v1.0.2/AUTHORS",
+    "bytes": 1907,
+    "sha256": "db1f371da0cba3fd82e9c521c054c40da88397cd8f8311c98080afaebf2f5d3b"
+  },
+  {
+    "file": "libogg-COPYING.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/ogg/790939cacc9a571bd2d3ca6c8fd49ddce5435399/COPYING",
+    "bytes": 1466,
+    "sha256": "d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814"
+  },
+  {
+    "file": "libopus-COPYING.txt",
+    "source": "https://raw.githubusercontent.com/xiph/opus/v1.3.1/COPYING",
+    "bytes": 1928,
+    "sha256": "8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682"
+  },
+  {
+    "file": "libopusfile-COPYING.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/opusfile/b3f3d2c8977e506e0c673aee72b3901e4c3db8c7/COPYING",
+    "bytes": 1487,
+    "sha256": "0267ae795ab744c4e0f9c45e249440fdf2e75dac8c804f36066b28649bf74aaf"
+  },
+  {
+    "file": "libmodplug-COPYING.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/libmodplug/ac378ae725e89195e6ffca6cfc68a64f16a1c650/COPYING",
+    "bytes": 57,
+    "sha256": "49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e"
+  },
+  {
+    "file": "libmodplug-README.txt",
+    "source": "https://raw.githubusercontent.com/libsdl-org/libmodplug/ac378ae725e89195e6ffca6cfc68a64f16a1c650/README",
+    "bytes": 8101,
+    "sha256": "5d77dd705fa32b46a50c733eaa68cef42b5baf322d1076a32dda8fbbe428e5cf"
+  },
+  {
+    "file": "PortMidi-license.txt",
+    "source": "https://raw.githubusercontent.com/PortMidi/portmidi/master/license.txt",
+    "bytes": 1849,
+    "sha256": "8d187c40c782da0e24489c4c4bf7590635e072dc0b70b0afda7b0652d290c1ea"
+  },
+  {
+    "file": "zlib1-LICENSE.txt",
+    "source": "https://raw.githubusercontent.com/madler/zlib/v1.2.11/README",
+    "bytes": 5187,
+    "sha256": "7960b6b1cc63e619abb77acaea5427159605afee8c8b362664f4effc7d7f7d15"
+  },
+  {
+    "file": "FreeSans-GPL-2.0.txt",
+    "source": "https://raw.githubusercontent.com/freetype/freetype/VER-2-11-1/docs/GPLv2.TXT",
+    "bytes": 17994,
+    "sha256": "c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18"
+  }
+]
