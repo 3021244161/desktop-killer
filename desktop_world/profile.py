@@ -9,7 +9,21 @@ from pathlib import Path
 import uuid
 
 SETTINGS = {"show_hints": True, "reduced_motion": False,
-            "drawing_guides": True, "tutorial_seen": False}
+            "drawing_guides": True, "tutorial_seen": False,
+            "music_enabled": True, "music_volume": .35,
+            "screen_flash": True, "screen_shake": True, "low_health_vignette": True}
+
+
+def _setting(key, value):
+    if key not in SETTINGS:
+        raise ValueError("unknown setting")
+    if key == "music_volume":
+        if type(value) not in (int, float) or not 0 <= value <= 1:
+            raise ValueError("music_volume must be a number from 0 to 1")
+        return float(value)
+    if type(value) is not bool:
+        raise ValueError(f"setting {key} must be boolean")
+    return value
 
 
 def _default_profile() -> dict:
@@ -89,9 +103,7 @@ def _validated(data: dict) -> dict:
     if not isinstance(settings, dict):
         raise ValueError("settings must be an object")
     for key, default in SETTINGS.items():
-        if type(settings.get(key, default)) is not bool:
-            raise ValueError(f"setting {key} must be boolean")
-        result["settings"][key] = settings.get(key, default)
+        result["settings"][key] = _setting(key, settings.get(key, default))
     for field in ("runs", "wins", "highest_stage"):
         result[field] = _integer(data.get(field, 0), field)
     if result["wins"] > result["runs"]:
@@ -183,10 +195,9 @@ def record_run(data: dict, summary: dict) -> bool:
     return bool(_record_run_receipt(data, summary)["new_record"])
 
 
-def set_setting(data: dict, key: str, value: bool) -> bool:
-    """Change a known boolean setting after validating the entire new profile."""
-    if key not in SETTINGS or type(value) is not bool:
-        raise ValueError("a setting needs a known key and boolean value")
+def set_setting(data: dict, key: str, value: bool | float) -> bool:
+    """Change a known setting after validating the entire new profile."""
+    value = _setting(key, value)
     from .progression import _transact
     def change(updated):
         changed = updated["settings"][key] != value

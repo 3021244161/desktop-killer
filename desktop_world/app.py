@@ -87,6 +87,8 @@ def run(args) -> int:
     profile_path = args.data_dir / "profile.json"
     profile = load_profile(profile_path)
     audio = SoundBank(muted=profile.get("muted", False))
+    logging.info("Audio prepared before desktop handover: effects=%s music=%s compose_s=%.3f muted=%s",
+                 audio.available, audio.music_available, audio.music_generation_seconds, audio.muted)
     profile_dirty = False
     save_retry_at = 0.0
 
@@ -212,15 +214,22 @@ def run(args) -> int:
                             scene.pulse()
             if not running:
                 break
-            active = args.demo or layer.desktop_active()
+            desktop_active = layer.desktop_active()
+            active = args.demo or desktop_active
             if not args.prototype and active != was_active:
                 scene.focus_changed(active)
             was_active = active
+            if not args.prototype:
+                # Apply focus/resume before the frame can emit effects; modal
+                # victory/upgrade cues may finish while their music is paused.
+                scene.update_audio(0, foreground=desktop_active)
             if active:
                 if args.prototype:
                     scene.update(dt, layer.cursor(), demo=args.demo)
                 else:
                     scene.update(dt, layer.cursor(), keys=layer.keys(), buttons=layer.buttons(), demo=args.demo)
+            if not args.prototype:
+                scene.update_audio(dt, foreground=desktop_active)
             frame = scene.render()
             layer.present(frame)
             if (args.capture_screen and scene.time >= 6 and "departed" not in screen_stages

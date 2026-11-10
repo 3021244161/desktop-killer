@@ -14,6 +14,8 @@
 
 异常退出后仍需恢复时运行 `DesktopKiller.exe --recover`；源码用 `python main.py --recover`。它只处理本游戏已经不再运行的显示租约。
 
+桌面快捷方式是单独的显式工具，不在游戏启动时自动创建。仅在用户要求后运行 `scripts/create_shortcut.ps1`：它通过当前用户 `DesktopDirectory` 获取真实路径，只创建一个“桌面叛乱.lnk”；目标精确属于本项目时可更新，其他同名链接会保留并另选名称。没有 Public Desktop、开机启动、管理员启动或注册表写入。图标由原有幽灵矢量角色生成，源码为 `scripts/build_icon.py`。
+
 ## 兼容范围与发行内容
 
 目标平台 Windows 10/11 x64，建议 1280×720 以上。当前实机验证环境为 Windows 10 22H2、1920×1080、125%、360 DesktopLite。**Win11 已做 DPI、窗口和恢复适配，但仍未有 Win11 实机验收。** 多屏混合 DPI、其他桌面整理工具和长时间运行需要单独验证。详见 [兼容矩阵](../compatibility.md) 与 [验证记录](../VALIDATION.md)。
@@ -44,6 +46,10 @@ python scripts/verify_desktop.py --game --crash
 # 构建与发行归档
 .\scripts\build.ps1
 .\scripts\release.ps1
+
+# 快捷方式先只读确认；最终构建通过且用户要求后再创建
+.\scripts\create_shortcut.ps1 -InspectOnly
+.\scripts\create_shortcut.ps1
 ```
 
 `--prototype` 仅保留最初融合演示用于回归，不是默认游戏入口。`--export-frames` 是透明游戏层 PNG，不等于真实屏幕合成截图；`--capture-screen` 需要桌面前台，缺失阶段不能计为通过。

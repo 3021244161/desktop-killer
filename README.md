@@ -4,7 +4,7 @@
 
 **今天，轮到桌面清理你。**
 
-[**下载试玩 · Windows**](https://github.com/3021244161/desktop-killer/releases/download/v0.3.0/DesktopKiller-v0.3.0-win-x64.zip)
+[**下载试玩 · Windows**](https://github.com/3021244161/desktop-killer/releases/download/v0.4.0/DesktopKiller-v0.4.0-win-x64.zip)
 
 </div>
 
@@ -23,6 +23,8 @@ Chrome 在瞄准你，Steam 已经冲过来了。
 继续躲弹幕，还是顶着追兵冲回去断链？慢一步，那个老熟人就会重新站起来，变得更快、更难打。
 
 把子弹打成扇面，让电弧在图标之间乱窜，再给自己围一圈刀刃。然后小心那个突然变大的图标——主控找上它了。
+
+主控一醒，鼓点也跟着提速。挨了一下，战场轻轻一震；屏幕边缘开始泛红时，该找机会喘口气了。
 
 ## 先停火，排个爱心。
 

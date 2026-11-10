@@ -15,6 +15,7 @@ a = Analysis([str(root / "main.py")], pathex=[str(root)], binaries=[], datas=dat
              noarchive=False)
 pyz = PYZ(a.pure)
 exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name="DesktopKiller", debug=False,
+          icon=str(root / "packaging" / "icon.ico"),
           bootloader_ignore_signals=False, strip=False, upx=False, console=False,
           disable_windowed_traceback=False, manifest=str(root / "packaging" / "DesktopKiller.manifest"),
           version=str(root / "packaging" / "version_info.txt"))

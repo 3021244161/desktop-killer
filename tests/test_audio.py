@@ -8,10 +8,31 @@ from desktop_world import audio
 
 
 class Channel:
-    def __init__(self, sound):
+    def __init__(self, mixer, sound=None):
+        self.mixer = mixer
         self.sound = sound
-        self.busy = True
+        self.busy = sound is not None
         self.stops = 0
+        self.plays = 0
+        self.paused = False
+        self.volume = 1.0
+
+    def play(self, sound, loops=0, fade_ms=0):
+        if self.mixer.fail_play:
+            raise pygame.error("device disconnected")
+        self.sound, self.busy, self.paused = sound, True, False
+        self.plays += 1
+        self.loops = loops
+        self.mixer.played.append(self)
+
+    def set_volume(self, volume):
+        self.volume = volume
+
+    def pause(self):
+        self.paused = True
+
+    def unpause(self):
+        self.paused = False
 
     def get_busy(self):
         return self.busy
@@ -31,7 +52,7 @@ class Sound:
     def play(self):
         if self.mixer.fail_play:
             raise pygame.error("device disconnected")
-        channel = Channel(self)
+        channel = Channel(self.mixer, self)
         self.mixer.played.append(channel)
         return channel
 
@@ -43,6 +64,16 @@ class Mixer:
         self.inits, self.quits = 0, 0
         self.played = []
         self.sounds = []
+        self.channels = [Channel(self) for _ in range(8)]
+
+    def get_num_channels(self):
+        return len(self.channels)
+
+    def set_num_channels(self, count):
+        self.channels.extend(Channel(self) for _ in range(count - len(self.channels)))
+
+    def Channel(self, index):
+        return self.channels[index]
 
     def get_init(self):
         return self.settings
@@ -125,7 +156,7 @@ def test_victory_replaces_combat_sounds_and_normal_polyphony_is_bounded(device):
     clock[0] = .5
     assert not bank.play("dash")
     assert bank.play("victory")
-    assert all(channel.stops == 1 for channel in mixer.played[:-1])
+    assert all(channel.stops == 1 for channel in mixer.played[:4])
     assert len(bank._channels) == 1
 
 
@@ -146,7 +177,7 @@ def test_all_feedback_has_nonzero_quiet_pcm_and_faded_boundaries(device):
     expected = {"shoot", "hit", "kill", "reboot", "seal", "upgrade", "hurt",
                 "dash", "boss", "victory", "defeat"}
     assert set(bank._sounds) == expected
-    for sound in mixer.sounds:
+    for sound in bank._sounds.values():
         values = array("h", sound.buffer)
         assert len(values) % 2 == 0
         assert 0 < max(abs(value) for value in values) <= round(.19 * 32767)

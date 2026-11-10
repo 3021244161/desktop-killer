@@ -1,3 +1,25 @@
+# v0.4.0 验证记录
+
+本轮新增：原创场景音乐、独立声音设置、边缘闪光/震动/残血反馈、应用图标和显式桌面快捷方式工具。
+
+- 快捷方式工具：在 Windows PowerShell 5.1 下，6 项测试通过，包括真实 `.lnk` 回读与便携目录/源码路径选择。全部测试文件只位于隔离临时目录，验证目标/工作目录/图标回读、普通启动、外来同名避让、更新已有项目链接、检查后文件变化拒绝覆盖。没有通过这些测试创建真实桌面快捷方式。
+- 图标：从现有原创幽灵矢量绘制生成 ICO，包含 16/24/32/48/64/128/256 七种尺寸；透明边缘已目视检查，没有桌面截图或私人图标采样。
+- PDF：v0.4.0 七页手册完成，中文字体全部嵌入，Poppler 七页渲染并逐页目视验版；`docs/玩法指南.pdf` 与 `output/pdf/玩法指南.pdf` 字节一致。只含原创角色图示，不含桌面采样。证据：`artifacts/manual-v04-validation.json`。
+- 源码真实桌面：Windows 10 + 360 DesktopLite，campaign 有界运行 25 秒后正常退出；游戏期间隐藏两个原来源，退出全部恢复，72 个图标几何一致。证据：`artifacts/v04-source-recovery/20261110-165733-source-campaign-normal-296601/result.json`。
+- 宿主真实音频设备：低音量播放验证四场景、暂停与静音，`available`、`music_available` 均为 true；本机合成耗时 0.457 秒。证据：`artifacts/audio-preview/host-playback.json`。
+- 最终自动回归：`python -m pytest -q`，**311 passed in 21.46s**；结果见 `artifacts/tests-v04.txt`。
+- 冻结包只读验证：限制子进程 PATH 为 Windows/System32 与 Windows，诊断及 probe 通过。证据：`artifacts/package-v04-readonly/20261110-170435-1278af/result.json`。
+- 冻结包战斗正常退出：有界 18 秒，两个原来源全部恢复，72 个图标几何一致。证据：`artifacts/package-v04-recovery/20261110-170449-package-campaign-normal-85faff/result.json`。
+- 冻结包绘画正常退出：有界 12 秒，两个原来源全部恢复，72 个图标几何一致。证据：`artifacts/package-v04-recovery/20261110-170541-package-drawing-normal-f9e7b7/result.json`。
+- 冻结包战斗强制结束：只终止验证脚本自行创建的游戏进程，独立守护恢复两个来源，72 个图标几何一致。证据：`artifacts/package-v04-recovery/20261110-170648-package-campaign-crash-ee1d37/result.json`。
+- 包日志确认音乐在桌面接管前完成预合成，`music=True`、`effects=True`；本机预合成耗时 0.326 至 0.353 秒。
+- 经用户明确授权，在实际当前用户 DesktopDirectory 创建一个“桌面叛乱.lnk”，指向最终 `dist/DesktopKiller/DesktopKiller.exe`。回读确认版本 0.4.0、工作目录为 exe 所在目录、图标为该 exe 的索引 0、参数为空、未设置 RunAs；没有启动游戏或改动其他桌面文件、排列、注册表。证据：`artifacts/shortcut-v04.json`。创建发生在包恢复验收之后，这个新增快捷方式不计入此前 72 项数据。
+- 创建快捷方式后再次以冻结包只读 probe 验证，成功读取包含新启动图标的 73 个图标；未隐藏桌面。证据：`artifacts/package-v04-with-shortcut/20261110-171142-713d49/result.json`。
+- 包根和 `_internal` 内的 PDF 与最终手册哈希一致，快捷方式辅助文件与源码一致，未夹带测试档案或桌面采样。证据：`artifacts/package-v04-files.json`。
+- Windows 11、混合 DPI、长时间压力测试仍待对应环境验收。
+
+以下保留历史验证记录。
+
 # v0.3.0 验证记录
 
 本轮新增：画画模式、换装、永久训练、账号等级、成就、设置、PDF 手册和发行包。

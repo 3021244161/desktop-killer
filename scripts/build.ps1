@@ -22,6 +22,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Could not generate the executable version reso
 & $Python -m PyInstaller --noconfirm --distpath $OutputDirectory --workpath (Join-Path $projectRoot 'build') (Join-Path $projectRoot 'DesktopKiller.spec')
 if ($LASTEXITCODE -ne 0) { throw 'Packaging failed; inspect the PyInstaller output.' }
 $packageRoot = Join-Path $OutputDirectory 'DesktopKiller'
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'create_shortcut.ps1') -Destination (Join-Path $packageRoot 'Create-Desktop-Shortcut.ps1') -Force
+Copy-Item -LiteralPath (Join-Path $projectRoot 'packaging\创建桌面快捷方式.cmd') -Destination $packageRoot -Force
 $docsPath = Join-Path $packageRoot 'docs'
 New-Item -ItemType Directory -Path $docsPath -Force | Out-Null
 Copy-Item -LiteralPath $manualPath -Destination (Join-Path $docsPath '玩法指南.pdf') -Force

@@ -45,7 +45,7 @@ class ProductViews:
 
     def _product_action(self, action):
         from . import progression, wardrobe
-        from .profile import set_setting
+        from .profile import SETTINGS, set_setting
         if action == "retry_save":
             if self._persist():
                 self.reward["saved"] = True
@@ -72,8 +72,13 @@ class ProductViews:
             if result and result.get("ok"):
                 self._say("训练完成 · 从下一局开始生效")
         elif category == "setting":
-            current = self.profile.get("settings", {}).get(value, value in ("show_hints", "drawing_guides"))
+            current = self.profile.get("settings", {}).get(value, SETTINGS[value])
             self._transaction(lambda: set_setting(self.profile, value, not current))
+        elif category == "volume":
+            current = self.profile.get("settings", {}).get("music_volume", .35)
+            levels = (.20, .35, .50, .70, 1.0)
+            volume = next((level for level in levels if level > current + .001), levels[0])
+            self._transaction(lambda: set_setting(self.profile, "music_volume", volume))
         elif category == "preset" and self.mode == "drawing":
             if self.session.preset(value):
                 self._record_formation(sum(self._line_length(line) for line in self.session.strokes))
@@ -126,7 +131,8 @@ class ProductViews:
         self._panel(rect)
         x, y = rect.x+round(24*sc), rect.y+round(22*sc)
         width = rect.w-round(48*sc)
-        self._text("DESKTOP KILLER  /  0.3", (x,y), MINT, 12)
+        from . import __version__
+        self._text("DESKTOP KILLER  /  " + __version__, (x,y), MINT, 12)
         self._text("桌面叛乱", (x,y+round(24*sc)), WHITE, 36)
         draw_character(self.frame, (rect.right-round(50*sc), y+round(46*sc)),
                        outfit=self._cached("equipped",lambda:equipped_outfit(self.profile)), scale=1.7*sc,
@@ -203,18 +209,34 @@ class ProductViews:
             y+=round(60*sc)
 
     def _draw_settings(self):
-        rect,x,y=self._page_frame("偏好设置","设置与战绩保存在本机；旧版档案会自动升级。",height=510)
+        from .profile import SETTINGS
+        rect,x,y=self._page_frame("声音与画面","调成你舒服的节奏。M 可随时切换全部声音。",height=640,width=540)
         sc=self.scale
-        for title,key,default in (("操作提示","show_hints",True),("减少动态效果","reduced_motion",False),
-                                  ("画画辅助线","drawing_guides",True)):
-            enabled=self.profile.get("settings",{}).get(key,default)
-            self._button(pygame.Rect(x,y,rect.w-round(48*sc),round(45*sc)),
+        settings=self.profile.get("settings",{})
+        width=rect.w-round(48*sc)
+        row_h=round(39*sc)
+        gap=round(12*sc)
+        half=(width-gap)//2
+        self._button(pygame.Rect(x,y,half,row_h),
+                     "全部声音：关" if self.profile.get("muted") else "全部声音：开","mute")
+        self._button(pygame.Rect(x+half+gap,y,half,row_h),
+                     f"音乐音量：{settings.get('music_volume',.35):.0%}","volume:next")
+        y+=round(54*sc)
+        entries=(("背景音乐","music_enabled"),("操作提示","show_hints"),
+                 ("边缘闪光","screen_flash"),("受击震动","screen_shake"),
+                 ("残血红边","low_health_vignette"),("画画辅助线","drawing_guides"))
+        for index,(title,key) in enumerate(entries):
+            enabled=settings.get(key,SETTINGS[key])
+            self._button(pygame.Rect(x+(half+gap)*(index%2),y+(index//2)*round(54*sc),half,row_h),
                          f"{title}：{'开' if enabled else '关'}","setting:"+key)
-            y+=round(55*sc)
-        self._button(pygame.Rect(x,y,rect.w-round(48*sc),round(45*sc)),
-                     "音效：关" if self.profile.get("muted") else "音效：开","mute")
-        y+=round(60*sc)
-        self._button(pygame.Rect(x,y,rect.w-round(48*sc),round(38*sc)),"打开存档目录","open_data")
+        y+=round(162*sc)
+        enabled=settings.get("reduced_motion",False)
+        self._button(pygame.Rect(x,y,width,row_h),
+                     f"减少动态效果：{'开' if enabled else '关'}","setting:reduced_motion")
+        y+=round(52*sc)
+        self._wrap("开启后关闭震动和闪光，残血红边保持静态。",x,y,width,DIM,12,2)
+        y+=round(56*sc)
+        self._button(pygame.Rect(x,y,width,row_h),"打开存档目录","open_data")
 
     def _draw_guide(self):
         rect,x,y=self._page_frame("从桌面开始冒险","战斗与创作，共用你自己的真实桌面图标。",height=610)

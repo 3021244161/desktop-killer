@@ -10,6 +10,7 @@ import pygame
 from .prototype import DesktopScene as AssetScene
 from .scene import GameSession
 from .product_view import ProductViews
+from .feedback import ScreenFeedback
 
 
 MODES = {
@@ -38,6 +39,8 @@ class GameView(ProductViews):
         self.offset = self.assets.offset
         self.work = self.assets.work
         self.scale = max(.48, min(1.7, self.work.h / 1042))
+        self.feedback = ScreenFeedback(scale=self.scale)
+        self._foreground = True
         self.profile = profile if profile is not None else {}
         self._profile_cache = {}
         self.audio = audio
@@ -102,6 +105,7 @@ class GameView(ProductViews):
         from .progression import talent_bonuses
         from .scene import DrawingSession
         self.mode = mode
+        self.feedback.clear()
         self.run_id = uuid.uuid4().hex
         self.reward = {}
         self.session = (DrawingSession(self.play_icons, self.snapshot.work_area) if mode == "drawing" else
@@ -125,6 +129,42 @@ class GameView(ProductViews):
 
     def _point(self, pos):
         return round(pos[0] - self.offset.x), round(pos[1] - self.offset.y)
+
+    def _camera_point(self, pos):
+        # Only moving game objects use this projection. Input, home positions
+        # and interface controls remain in unshifted physical screen space.
+        x, y = self._point(pos)
+        dx, dy = self.feedback.offset()
+        return x + dx, y + dy
+
+    def update_audio(self, dt, *, foreground=True):
+        if not self.audio or not hasattr(self.audio, "update_music"):
+            return
+        settings = self.profile.get("settings", {})
+        context, paused, suspended = "menu", not foreground, not foreground
+        if self.session:
+            if self.mode == "drawing":
+                context, paused = "drawing", paused or self.drawing_paused
+                suspended = suspended or self.drawing_paused
+            else:
+                context = "boss" if self.session.boss_spawned and not self.session.boss_defeated else "battle"
+                paused = paused or self.session.state != "playing"
+                suspended = suspended or self.session.state == "paused"
+        self.audio.update_music(context, dt, paused=paused,
+                                suspended=suspended,
+                                enabled=settings.get("music_enabled", True),
+                                volume=settings.get("music_volume", .35))
+
+    def _update_feedback(self, dt):
+        settings = self.profile.get("settings", {})
+        active = (self._foreground and self.session is not None and self.mode != "drawing"
+                  and self.session.state == "playing")
+        hp_ratio = self.session.player.hp / max(1, self.session.player.max_hp) if active else 1
+        self.feedback.update(dt, hp_ratio, active=active,
+                             reduced_motion=settings.get("reduced_motion", False),
+                             flashes=settings.get("screen_flash", True),
+                             shake=settings.get("screen_shake", True),
+                             low_health=settings.get("low_health_vignette", True))
 
     def _text(self, text, pos, color=WHITE, size=14, *, center=False, right=False, surface=None):
         surface = surface or self.frame
@@ -267,7 +307,7 @@ class GameView(ProductViews):
         return None
 
     def _act(self, action, cursor=None):
-        if action.startswith(("page:", "outfit:", "talent:", "setting:", "preset:", "draw:")) or action in ("help", "open_data", "retry_save"):
+        if action.startswith(("page:", "outfit:", "talent:", "setting:", "volume:", "preset:", "draw:")) or action in ("help", "open_data", "retry_save"):
             return self._product_action(action)
         if action == "quit":
             return "quit"
@@ -296,6 +336,9 @@ class GameView(ProductViews):
         return None
 
     def focus_changed(self, active):
+        self._foreground = active
+        if not active:
+            self.feedback.clear()
         if self.session and self.mode == "drawing":
             if not active:
                 self.session.cancel_stroke()
@@ -312,9 +355,11 @@ class GameView(ProductViews):
         self.toast_left = max(0, self.toast_left - dt)
         self.hover = self._point(cursor)
         if not self.session:
+            self._update_feedback(dt)
             return
         if self.mode == "drawing":
             self._update_drawing(dt, cursor, keys, buttons, demo)
+            self._update_feedback(dt)
             return
         s = self.session
         movement = ((int(0x44 in keys or 0x27 in keys) - int(0x41 in keys or 0x25 in keys)),
@@ -354,6 +399,7 @@ class GameView(ProductViews):
                 particle[4] -= dt
             self.particles[:] = [p for p in self.particles if p[4] > 0]
         for event in s.drain_events():
+            self.feedback.receive(event)
             kind = event.get("kind", "")
             if self.audio:
                 sound = "reboot" if kind == "wake" and event.get("generation", 0) > 0 else {
@@ -372,6 +418,7 @@ class GameView(ProductViews):
                 self.notice, self.notice_left = "主控已接管一个图标 · 注意红色预警", 4.0
             elif kind == "surge":
                 self.notice, self.notice_left = "入侵回流 · 已断链的图标再次苏醒", 3.0
+        self._update_feedback(dt)
         if s.state in ("won", "lost") and not self.result_written:
             self.result_written = True
             summary = dict(s.summary(), run_id=self.run_id)
@@ -407,6 +454,8 @@ class GameView(ProductViews):
                 (t + b) / 2 + math.cos(s.total_time * .5) * (b - t) * .24)
 
     def render(self):
+        # Clear transients immediately on modal changes, even without an update.
+        self._update_feedback(0)
         self.frame.fill((0, 0, 0, 0))
         self.buttons.clear()
         if not self.session:
@@ -425,13 +474,19 @@ class GameView(ProductViews):
             if actor.key not in battle_keys:
                 self.assets._draw_actor(actor)
         for actor in s.actors:
-            self._draw_actor(actor)
+            if actor.state in ("home", "sealed", "rebooting"):
+                self._draw_actor(actor)
+        clip = self.frame.get_clip()
+        self.frame.set_clip(clip.clip(self.work))
+        for actor in s.actors:
+            if actor.state not in ("home", "sealed", "rebooting"):
+                self._draw_actor(actor)
         for shard in s.shards:
-            x, y = self._point(shard.pos)
+            x, y = self._camera_point(shard.pos)
             pygame.draw.polygon(self.frame, (*MINT, 240), [(x, y-4), (x+4, y), (x, y+4), (x-4, y)])
         self._draw_effects()
         for bullet in s.bullets:
-            x, y = self._point(bullet.pos)
+            x, y = self._camera_point(bullet.pos)
             color = RED if bullet.enemy else MINT
             radius = max(2, round(bullet.radius))
             pygame.draw.circle(self.frame, (*color, 55), (x, y), radius + 4)
@@ -439,7 +494,9 @@ class GameView(ProductViews):
         self._draw_player()
         self._draw_guidance()
         for x, y, vx, vy, life, color in self.particles:
-            pygame.draw.circle(self.frame, (*color, round(255 * min(1, life/.25))), self._point((x, y)), 2)
+            pygame.draw.circle(self.frame, (*color, round(255 * min(1, life/.25))), self._camera_point((x, y)), 2)
+        self.frame.set_clip(clip)
+        self.feedback.render_overlay(self.frame, self.work)
         self._draw_hud()
         if s.state in ("upgrade", "intermission"):
             self._draw_choices()
@@ -478,7 +535,7 @@ class GameView(ProductViews):
             else:
                 self._text("靠近断链", (home[0], home[1]+38), GOLD, 11, center=True)
             return
-        x, y = self._point(actor.pos)
+        x, y = self._camera_point(actor.pos)
         progress = min(1.0, actor.state_time / .7) if actor.state == "waking" else 1.0
         reduced = self.profile.get("settings", {}).get("reduced_motion", False)
         angle = 0 if reduced else math.sin(actor.state_time * (17 if actor.state == "waking" else 8)) * 6 * progress
@@ -501,7 +558,7 @@ class GameView(ProductViews):
         if actor.is_boss:
             pygame.draw.circle(self.frame, (*RED, 160), (x, y), round(actor.radius + 7), 2)
         if actor.telegraph_left > 0:
-            target = self._point(actor.aim)
+            target = self._camera_point(actor.aim)
             pygame.draw.line(self.frame, (*RED, 130), (x, y), target, 2)
             pygame.draw.circle(self.frame, (*RED, 160), target, 13, 1)
         self.frame.blit(image, image.get_rect(center=(x, round(y - lift))))
@@ -521,7 +578,7 @@ class GameView(ProductViews):
     def _draw_player(self):
         from .wardrobe import draw_character, equipped_outfit
         s, p = self.session, self.session.player
-        center = self._point(p.pos)
+        center = self._camera_point(p.pos)
         draw_character(self.frame, center, outfit=self._cached("equipped", lambda: equipped_outfit(self.profile)), scale=s.scale,
                        clock=0 if self.profile.get("settings", {}).get("reduced_motion") else self.clock,
                        hurt=max(0, .32-p.hurt_age), dashing=p.dash_left>0)
@@ -540,14 +597,15 @@ class GameView(ProductViews):
     def _draw_effects(self):
         for effect in self.session.effects:
             kind = effect.get("kind")
-            x, y = self._point((effect.get("x", 0), effect.get("y", 0)))
+            project = self._point if kind == "seal" else self._camera_point
+            x, y = project((effect.get("x", 0), effect.get("y", 0)))
             ttl = max(0, effect.get("ttl", .2))
             if kind == "chain":
                 points = effect.get("points")
                 if points and len(points) >= 2:
-                    pygame.draw.lines(self.frame, (*BLUE, 220), False, [self._point(pt) for pt in points], 3)
+                    pygame.draw.lines(self.frame, (*BLUE, 220), False, [self._camera_point(pt) for pt in points], 3)
                 elif effect.get("target"):
-                    pygame.draw.line(self.frame, BLUE, (x,y), self._point(effect["target"]), 3)
+                    pygame.draw.line(self.frame, BLUE, (x,y), self._camera_point(effect["target"]), 3)
             elif kind in ("pulse", "seal", "kill"):
                 radius = round(effect.get("radius", 100 if kind == "pulse" else 24) * (1 - min(1,ttl/.5)))
                 pygame.draw.circle(self.frame, (*(MINT if kind != "kill" else GOLD), 160), (x,y), max(1,radius), 2)
@@ -572,7 +630,7 @@ class GameView(ProductViews):
         if delta.length() < 120 * self.scale:
             return
         direction = delta.normalize()
-        center = pygame.Vector2(self._point(s.player.pos)) + direction * 42 * self.scale
+        center = pygame.Vector2(self._camera_point(s.player.pos)) + direction * 42 * self.scale
         tangent = pygame.Vector2(-direction.y, direction.x)
         points = [center + direction * 8, center - direction * 5 + tangent * 5,
                   center - direction * 5 - tangent * 5]
