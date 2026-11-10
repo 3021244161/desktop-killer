@@ -5,6 +5,7 @@
 *.cmd text eol=crlf
 *.pdf binary
 *.png binary
+*.gif binary
 *.zip binary
 # Keep upstream license bytes intact so provenance hashes remain valid.
 packaging/licenses/** -text

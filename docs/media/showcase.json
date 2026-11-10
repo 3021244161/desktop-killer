@@ -1,0 +1,47 @@
+{
+  "source": "Forty script-generated original icons with fictional names; no desktop capture",
+  "background": "Fictional demonstration backdrop, never used by the game",
+  "size": [
+    960,
+    540
+  ],
+  "speed": "real-time",
+  "battle": {
+    "fps": 12,
+    "duration_s": 8.0,
+    "simulation_start_s": 24.0,
+    "simulation_end_s": 32.0,
+    "summary": {
+      "mode": "campaign",
+      "state": "playing",
+      "chapter": 1,
+      "stage": 1,
+      "won": false,
+      "score": 2165,
+      "kills": 23,
+      "sealed": 0,
+      "revivals": 12,
+      "bosses": 0,
+      "time": 32.0,
+      "level": 5,
+      "reason": "",
+      "upgrades": {
+        "fire_rate": 2,
+        "chain": 2
+      }
+    },
+    "bytes": 771036
+  },
+  "drawing": {
+    "fps": 12,
+    "duration_s": 9.5,
+    "pen_down_s": 0.5,
+    "pen_up_s": 3.5,
+    "all_arrived_s": 6.75,
+    "final_hold_s": 2.75,
+    "arrived": 40,
+    "icons": 40,
+    "stroke_count": 1,
+    "bytes": 451423
+  }
+}
